@@ -6,7 +6,7 @@
 // declare functions prior to main, and write after for ease of reading
 void drawBoard(char *spaces);
 void playerMove(char *spaces, char player);
-void computerMove(char *spaces, char computer);
+void computerMove(char *spaces, char computer, char player);
 bool checkWinner(char *spaces, char player, char computer);
 bool checkTie(char *spaces);
 std::string getPlayerName();
@@ -25,7 +25,7 @@ int main(){
     
     while(running){
         playerMove(spaces, player);
-        drawBoard(spaces);
+        //drawBoard(spaces);
         if(checkWinner(spaces, player, computer)){
             running = false;
             break;
@@ -35,7 +35,7 @@ int main(){
             break;
         }
         
-        computerMove(spaces, computer);
+        computerMove(spaces, computer, player);
         drawBoard(spaces);
         if(checkWinner(spaces, player, computer)){
             running = false;
@@ -81,7 +81,63 @@ void playerMove(char *spaces, char player){
 }
 
 // function that randomly pick an open space for the computer
-void computerMove(char *spaces, char computer){
+void computerMove(char *spaces, char computer, char player){
+
+    int winConditions[8][3] = {
+        {0,1,2}, {3,4,5}, {6,7,8},  // Rows
+        {0,3,6}, {1,4,7}, {2,5,8},  // Columns
+        {0,4,8}, {2,4,6}            // Diagonals
+    };
+    
+    // have computer try to win if one away
+    for (auto &condition : winConditions) {
+        if(spaces[condition[0]] == computer && spaces[condition[1]] == computer && spaces[condition[2]] == ' '){
+            spaces[condition[2]] = computer;
+            return;
+        }
+        if(spaces[condition[0]] == computer && spaces[condition[2]] == computer && spaces[condition[1]] == ' '){
+            spaces[condition[1]] = computer;
+            return;
+        }
+        if(spaces[condition[1]] == computer && spaces[condition[2]] == computer && spaces[condition[0]] == ' '){
+            spaces[condition[0]] = computer;
+            return;
+        }
+    }
+    
+    // prevent user from winning
+    for (auto &condition : winConditions) {
+        if(spaces[condition[0]] == player && spaces[condition[1]] == player && spaces[condition[2]] == ' '){
+            spaces[condition[2]] = computer;
+            return;
+        }
+        if(spaces[condition[0]] == player && spaces[condition[2]] == player && spaces[condition[1]] == ' '){
+            spaces[condition[1]] = computer;
+            return;
+        }
+        if(spaces[condition[1]] == player && spaces[condition[2]] == player && spaces[condition[0]] == ' '){
+            spaces[condition[0]] = computer;
+            return;
+        }
+    }
+    
+    // try to take the center to prevent diagonal defeat
+    if(spaces[4] == ' '){
+        spaces[4] = computer;
+        return;
+    }
+    
+    // if cannot win, doesn't need to block, and center is taken, take a corner
+    int corners[] = {0, 2, 6, 8};
+    for(int i = 0; i < 4; i++){
+        if(spaces[corners[i]] == ' ') {
+            spaces[corners[i]] = computer;
+            return;
+        }
+    }
+    
+    // if none of the above options are available, pick a random spot using
+    // a random number generator and modulus 9
     int number;
     srand(time(0));
     
