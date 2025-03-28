@@ -49,28 +49,8 @@ Edit
 ./tic_tac_toe
 Example of the Game Output:
 
-     |     |     
-  1  |  2  |  3  
-_____|_____|______
-     |     |     
-  4  |  5  |  6  
-_____|_____|______
-     |     |     
-  7  |  8  |  9  
-     |     |     
-
-Enter a spot to place a marker (1-9): 3
-
-     |     |     
-     |     |  X  
-_____|_____|______
-     |     |     
-     |     |    
-_____|_____|______
-     |     |     
-     |     |    
-     |     |     
-
+![Tic_Tac_Toe](https://github.com/user-attachments/assets/f1d7b648-00d6-435d-ba88-1ac01ec1070f)
+  
 ## Functions:
 void drawBoard(char *spaces)
 Draws the current Tic-Tac-Toe board.
