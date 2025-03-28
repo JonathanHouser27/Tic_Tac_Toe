@@ -128,5 +128,4 @@ bool checkTie(char *spaces){
     }
     std::cout << "IT'S A TIE!\n";
     return true;
-
 }
